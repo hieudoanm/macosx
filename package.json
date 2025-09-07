@@ -20,6 +20,7 @@
   "author": "hieudoanm <hieumdoan@gmail.com> (https://hieudoanm.github.io)",
   "private": true,
   "scripts": {
+    "docs": "rimraf docs && docsify init ./docs && touch ./docs/.nojekyll",
     "predev": "kill-port 3000 || true",
     "dev": "next dev --turbopack",
     "tauri:dev": "tauri dev",
@@ -47,6 +48,7 @@
     "@types/node": "24.3.1",
     "@types/react": "19.1.12",
     "@types/react-dom": "19.1.9",
+    "docsify-cli": "4.4.4",
     "eslint": "9.35.0",
     "eslint-config-next": "15.5.2",
     "husky": "9.1.7",
