@@ -61,6 +61,6 @@
   },
   "resolutions": {
     "got": "11.8.5",
-    "marked": "4.0.10"
+    "marked": "16.2.1"
   }
 }
