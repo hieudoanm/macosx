@@ -4,6 +4,9 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  marked: 4.0.10
+
 importers:
   .:
     dependencies:
@@ -3085,12 +3088,12 @@ packages:
       }
     engines: { node: '>=8' }
 
-  marked@1.2.9:
+  marked@4.0.10:
     resolution:
       {
-        integrity: sha512-H8lIX2SvyitGX+TRdtS06m1jHMijKN/XjfH6Ooii9fvxMlh8QdqBfBDkGUpMWH2kQNrtixjzYUa3SH8ROTgRRw==,
+        integrity: sha512-+QvuFj0nGgO970fySghXGmuw+Fd0gD2x3+MqCWLIPf5oxdv1Ka6b2q+z9RP01P/IaKPMEramy+7cNy/Lw8c3hw==,
       }
-    engines: { node: '>= 8.16.2' }
+    engines: { node: '>= 12' }
     hasBin: true
 
   math-intrinsics@1.1.0:
@@ -5542,7 +5545,7 @@ snapshots:
 
   docsify@4.13.1:
     dependencies:
-      marked: 1.2.9
+      marked: 4.0.10
       medium-zoom: 1.1.0
       opencollective-postinstall: 2.0.3
       prismjs: 1.30.0
@@ -6467,7 +6470,7 @@ snapshots:
     dependencies:
       semver: 6.3.1
 
-  marked@1.2.9: {}
+  marked@4.0.10: {}
 
   math-intrinsics@1.1.0: {}
 
