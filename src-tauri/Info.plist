@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+  "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- App Identification -->
+  <key>CFBundleDisplayName</key>
+  <string>WiFi Scanner</string>
+  <key>CFBundleIdentifier</key>
+  <string>com.hieudoan.wifi</string>
+  <key>CFBundleName</key>
+  <string>wifi</string>
+  <key>CFBundleVersion</key>
+  <string>1.0.0</string>
+  <key>CFBundleShortVersionString</key>
+  <string>1.0.0</string>
+
+  <!-- macOS minimum OS requirement -->
+  <key>LSMinimumSystemVersion</key>
+  <string>10.13</string>
+
+  <!-- Required for Wi-Fi scanning -->
+  <key>NSLocationWhenInUseUsageDescription</key>
+  <string>This app needs location access to scan nearby Wi-Fi networks.</string>
+
+  <key>NSLocationAlwaysUsageDescription</key>
+  <string>This app needs location access to scan nearby Wi-Fi networks.</string>
+
+  <!-- Optional: hide dock icon if you only want a menu bar app -->
+  <key>LSUIElement</key>
+  <true/>
+
+  <!-- Security -->
+  <key>NSAppTransportSecurity</key>
+  <dict>
+    <key>NSAllowsArbitraryLoads</key>
+    <true/>
+  </dict>
+</dict>
+</plist>

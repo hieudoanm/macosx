@@ -1,27 +1,59 @@
 {
   "name": "wifi",
-  "version": "0.1.0",
+  "version": "0.0.1",
+  "description": "Wifi by Strength",
+  "keywords": [
+    "wifi",
+    "macos",
+    "strength"
+  ],
+  "homepage": "https://github.com/hieudoanm/wifi#readme",
+  "bugs": {
+    "url": "https://github.com/hieudoanm/wifi/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/hieudoanm/wifi.git"
+  },
+  "license": "GPL-3.0",
+  "author": "hieudoanm <hieumdoan@gmail.com> (https://hieudoanm.github.io)",
   "private": true,
   "scripts": {
+    "predev": "kill-port 3000 || true",
     "dev": "next dev --turbopack",
+    "tauri:dev": "tauri dev",
+    "swift:build": "rimraf ./src-tauri/bin/wifi && make build",
+    "prebuild": "rimraf .next out",
     "build": "next build --turbopack",
+    "tauri:build": "tauri build",
+    "prestart": "kill-port 3000 || true",
     "start": "next start",
-    "lint": "eslint"
+    "format": "prettier --cache --write .",
+    "lint": "eslint",
+    "prepare": "husky"
   },
   "dependencies": {
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "next": "15.5.2"
+    "@tauri-apps/api": "2.8.0",
+    "next": "15.5.2",
+    "react": "19.1.1",
+    "react-dom": "19.1.1",
+    "react-icons": "5.5.0"
   },
   "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
-    "eslint": "^9",
+    "@eslint/eslintrc": "3.3.1",
+    "@tailwindcss/postcss": "4.1.13",
+    "@tauri-apps/cli": "2.8.4",
+    "@types/node": "24.3.1",
+    "@types/react": "19.1.12",
+    "@types/react-dom": "19.1.9",
+    "eslint": "9.35.0",
     "eslint-config-next": "15.5.2",
-    "@eslint/eslintrc": "^3"
+    "husky": "9.1.7",
+    "kill-port": "2.0.1",
+    "prettier": "3.6.2",
+    "prettier-plugin-tailwindcss": "0.6.14",
+    "rimraf": "6.0.1",
+    "tailwindcss": "4.1.13",
+    "typescript": "5.9.2"
   }
 }

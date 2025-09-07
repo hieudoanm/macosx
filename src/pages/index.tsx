@@ -1,115 +1,168 @@
-import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
+import { invoke } from '@tauri-apps/api/core';
+import { NextPage } from 'next';
+import { useEffect, useState } from 'react';
+import {
+  MdLock,
+  MdRefresh,
+  MdSignalWifi1Bar,
+  MdSignalWifi2Bar,
+  MdSignalWifi3Bar,
+  MdSignalWifi4Bar,
+  MdWifi,
+} from 'react-icons/md';
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+type WifiNetwork = {
+  ssid: string;
+  bssid: string;
+  rssi: number;
+  channel: string;
+  secure: boolean;
+};
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const delay = async (seconds: number) => {
+  return new Promise((resolve) => setTimeout(resolve, seconds * 1000));
+};
 
-export default function Home() {
+// Map RSSI to 0-4 levels
+const getSignalLevel = (rssi: number) => {
+  if (rssi >= -50) return 4; // Excellent
+  if (rssi >= -60) return 3; // Good
+  if (rssi >= -70) return 2; // Fair
+  return 1; // Weak
+};
+
+// Return the correct Wi-Fi icon
+const getWifiIcon = (level: number) => {
+  const size: number = 24;
+  switch (level) {
+    case 4:
+      return <MdSignalWifi4Bar size={size} />;
+    case 3:
+      return <MdSignalWifi3Bar size={size} />;
+    case 2:
+      return <MdSignalWifi2Bar size={size} />;
+    default:
+      return <MdSignalWifi1Bar size={size} />;
+  }
+};
+
+const HomePage: NextPage = () => {
+  const [{ loading = false, error = null, networks = [] }, setState] =
+    useState<{
+      loading: boolean;
+      error: string | null;
+      networks: WifiNetwork[];
+    }>({ loading: false, error: null, networks: [] });
+
+  useEffect(() => {
+    scanNetworks();
+  }, []);
+
+  const scanNetworks = async () => {
+    try {
+      setState((prev) => ({ ...prev, loading: true, error: null }));
+      const result = await invoke<WifiNetwork[]>('list_wifi_networks');
+      await delay(5);
+      result.sort((a, b) => b.rssi - a.rssi);
+      setState({ loading: false, error: null, networks: result });
+    } catch (error) {
+      setState({ loading: false, error: String(error), networks: [] });
+    }
+  };
+
+  const handleConnect = async (network: WifiNetwork) => {
+    console.log('Connecting to network:', network);
+
+    try {
+      const result = await invoke<string>('connect_wifi', {
+        ssid: network.ssid,
+        password: undefined,
+      });
+      alert(result);
+    } catch (err) {
+      alert(`Failed to connect: ${err}`);
+    }
+  };
+
   return (
-    <div
-      className={`${geistSans.className} ${geistMono.className} font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20`}
-    >
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/pages/index.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="container mx-auto flex h-screen w-screen flex-col gap-y-8 overflow-hidden bg-black p-8 text-white">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <h1 className="text-xl font-bold">Wi-Fi</h1>
+        <button
+          className="cursor-pointer rounded-full border border-white/20 bg-white/10 px-4 py-1.5 shadow-lg backdrop-blur-md transition-all hover:bg-white/20 active:bg-white/30 disabled:cursor-not-allowed disabled:opacity-50"
+          onClick={scanNetworks}
+          disabled={loading}>
+          {loading ? (
+            <MdWifi className="animate-spin" size={20} />
+          ) : (
+            <MdRefresh size={20} />
+          )}{' '}
+        </button>
+      </div>
+
+      {/* Error Message */}
+      {!loading && error && (
+        <div className="border-b border-neutral-700 bg-neutral-800 text-red-400">
+          Error: {error}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      )}
+
+      {/* Wi-Fi List */}
+      <div className="flex-1 overflow-hidden overflow-y-auto rounded-lg">
+        {loading && (
+          <div className="bg-opacity-80 absolute inset-0 z-10 flex flex-col items-center justify-center bg-neutral-950">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-neutral-600 border-t-white" />
+            <p className="mt-2 text-sm text-neutral-300">Scanning...</p>
+          </div>
+        )}
+
+        <ul className="divide-y divide-neutral-800 overflow-hidden rounded-lg bg-neutral-900 shadow-lg">
+          {networks.map((network) => {
+            const level = getSignalLevel(network.rssi);
+
+            return (
+              <button
+                key={`network-${network.bssid}`}
+                type="button"
+                className="flex w-full cursor-pointer items-center space-x-3 px-6 py-3 transition-colors hover:bg-neutral-800 focus:outline-none"
+                onClick={() => handleConnect(network)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    handleConnect(network);
+                  }
+                }}
+                aria-label={`Connect to ${network.ssid || 'Hidden'} Wi-Fi network`}>
+                {/* Left side: Wi-Fi icon, SSID, Lock */}
+                <div className="flex items-center justify-center rounded-full bg-neutral-800 p-2 text-white">
+                  {getWifiIcon(level)}
+                </div>
+                <div className="flex grow items-center space-x-3">
+                  <div className="flex flex-col items-start gap-y-1">
+                    <span className="leading-tight font-medium">
+                      {network.ssid || '<Hidden>'}
+                    </span>
+                    <span className="text-xs text-neutral-400">
+                      Channel: {network.channel}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex flex-col items-end gap-y-1">
+                  {network.secure && (
+                    <MdLock className="text-neutral-400" size={14} />
+                  )}
+                  {/* RSSI */}
+                  <span className="text-sm text-neutral-400">
+                    {network.rssi} dBm
+                  </span>
+                </div>
+              </button>
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
-}
+};
+
+export default HomePage;
