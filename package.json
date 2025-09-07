@@ -1,19 +1,20 @@
 {
-  "name": "wifi",
+  "name": "macosx",
   "version": "0.0.1",
-  "description": "Wifi by Strength",
+  "description": "macosx",
   "keywords": [
+    "clipboard",
     "wifi",
-    "macos",
+    "macosx",
     "strength"
   ],
-  "homepage": "https://github.com/hieudoanm/wifi#readme",
+  "homepage": "https://github.com/hieudoanm/macosx#readme",
   "bugs": {
-    "url": "https://github.com/hieudoanm/wifi/issues"
+    "url": "https://github.com/hieudoanm/macosx/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/hieudoanm/wifi.git"
+    "url": "git+ssh://git@github.com/hieudoanm/macosx.git"
   },
   "license": "GPL-3.0",
   "author": "hieudoanm <hieumdoan@gmail.com> (https://hieudoanm.github.io)",

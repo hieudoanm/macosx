@@ -1,1 +1,4 @@
-# MacOS Wi-Fi
+# macOSX (macOS Extensions)
+
+- Clipboard
+- Wi-Fi

@@ -1,8 +1,8 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "wifi",
+  "productName": "macOSX",
   "version": "0.1.0",
-  "identifier": "io.hieudoanm.wifi",
+  "identifier": "io.hieudoanm.macosx",
 
   "build": {
     "frontendDist": "../out",
