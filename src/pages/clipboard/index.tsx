@@ -12,7 +12,7 @@ type ClipboardEntry = {
 const Clipboard: FC<{
   clipboard: ClipboardEntry[];
   fetchClipboard: () => Promise<void>;
-}> = ({ clipboard = [], fetchClipboard = () => {} }) => {
+}> = ({ clipboard = [], fetchClipboard = () => Promise.resolve() }) => {
   if (clipboard.length === 0) {
     return (
       <p className="p-4 text-center text-neutral-500">
@@ -67,41 +67,43 @@ const ClipboardPage = () => {
   }, []);
 
   return (
-    <div className="container mx-auto flex h-screen w-screen flex-col gap-y-8 overflow-hidden bg-black p-8 text-white">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-x-2">
-          <Link href="/">
-            <MdChevronLeft size={24} className="cursor-pointer" />
-          </Link>
-          <h1 className="text-xl font-bold">Clipboard</h1>
+    <div className="h-screen w-screen overflow-hidden text-white">
+      <div className="container mx-auto flex h-full flex-col gap-y-8 overflow-y-auto p-8">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-x-2">
+            <Link href="/">
+              <MdChevronLeft size={24} className="cursor-pointer" />
+            </Link>
+            <h1 className="text-xl font-bold">Clipboard</h1>
+          </div>
+          <button
+            className="cursor-pointer rounded-full border border-white/20 bg-white/10 px-4 py-1.5 shadow-lg backdrop-blur-md transition-all hover:bg-white/20 active:bg-white/30 disabled:cursor-not-allowed disabled:opacity-50"
+            onClick={fetchClipboard}
+            disabled={loading}>
+            {loading ? (
+              <FaClipboard className="animate-spin" size={20} />
+            ) : (
+              <MdRefresh size={20} />
+            )}
+          </button>
         </div>
-        <button
-          className="cursor-pointer rounded-full border border-white/20 bg-white/10 px-4 py-1.5 shadow-lg backdrop-blur-md transition-all hover:bg-white/20 active:bg-white/30 disabled:cursor-not-allowed disabled:opacity-50"
-          onClick={fetchClipboard}
-          disabled={loading}>
-          {loading ? (
-            <FaClipboard className="animate-spin" size={20} />
-          ) : (
-            <MdRefresh size={20} />
-          )}
-        </button>
-      </div>
 
-      {/* Error Message */}
-      {error && (
-        <div className="border-b border-neutral-700 bg-neutral-800 p-2 text-red-400">
-          Error: {error}
-        </div>
-      )}
-
-      {/* Clipboard List */}
-      <div className="flex-1 overflow-y-auto rounded-lg bg-neutral-900 shadow-lg">
-        {loading ? (
-          <p className="p-4 text-neutral-400">Loading clipboard...</p>
-        ) : (
-          <Clipboard clipboard={clipboard} fetchClipboard={fetchClipboard} />
+        {/* Error Message */}
+        {error && (
+          <div className="border-b border-neutral-700 bg-neutral-800 p-2 text-red-400">
+            Error: {error}
+          </div>
         )}
+
+        {/* Clipboard List */}
+        <div className="flex-1 overflow-y-auto rounded-lg bg-neutral-900 shadow-lg">
+          {loading ? (
+            <p className="p-4 text-neutral-400">Loading clipboard...</p>
+          ) : (
+            <Clipboard clipboard={clipboard} fetchClipboard={fetchClipboard} />
+          )}
+        </div>
       </div>
     </div>
   );

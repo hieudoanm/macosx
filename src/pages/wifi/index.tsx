@@ -87,86 +87,88 @@ const WiFiPage: NextPage = () => {
   };
 
   return (
-    <div className="container mx-auto flex h-screen w-screen flex-col gap-y-8 overflow-hidden bg-black p-8 text-white">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-x-2">
-          <Link href="/">
-            <MdChevronLeft size={24} />
-          </Link>
-          <h1 className="text-xl font-bold">Wi-Fi</h1>
+    <div className="h-screen w-screen overflow-hidden text-white">
+      <div className="container mx-auto flex h-full flex-col gap-y-8 overflow-y-auto p-8">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-x-2">
+            <Link href="/">
+              <MdChevronLeft size={24} />
+            </Link>
+            <h1 className="text-xl font-bold">Wi-Fi</h1>
+          </div>
+          <button
+            className="cursor-pointer rounded-full border border-white/20 bg-white/10 px-4 py-1.5 shadow-lg backdrop-blur-md transition-all hover:bg-white/20 active:bg-white/30 disabled:cursor-not-allowed disabled:opacity-50"
+            onClick={scanNetworks}
+            disabled={loading}>
+            {loading ? (
+              <MdWifi className="animate-spin" size={20} />
+            ) : (
+              <MdRefresh size={20} />
+            )}
+          </button>
         </div>
-        <button
-          className="cursor-pointer rounded-full border border-white/20 bg-white/10 px-4 py-1.5 shadow-lg backdrop-blur-md transition-all hover:bg-white/20 active:bg-white/30 disabled:cursor-not-allowed disabled:opacity-50"
-          onClick={scanNetworks}
-          disabled={loading}>
-          {loading ? (
-            <MdWifi className="animate-spin" size={20} />
-          ) : (
-            <MdRefresh size={20} />
-          )}
-        </button>
-      </div>
 
-      {/* Error Message */}
-      {!loading && error && (
-        <div className="border-b border-neutral-700 bg-neutral-800 text-red-400">
-          Error: {error}
-        </div>
-      )}
-
-      {/* Wi-Fi List */}
-      <div className="flex-1 overflow-hidden overflow-y-auto rounded-lg">
-        {loading && (
-          <div className="bg-opacity-80 absolute inset-0 z-10 flex flex-col items-center justify-center bg-neutral-950">
-            <div className="h-8 w-8 animate-spin rounded-full border-4 border-neutral-600 border-t-white" />
-            <p className="mt-2 text-sm text-neutral-300">Scanning...</p>
+        {/* Error Message */}
+        {!loading && error && (
+          <div className="border-b border-neutral-700 bg-neutral-800 text-red-400">
+            Error: {error}
           </div>
         )}
 
-        <ul className="divide-y divide-neutral-800 overflow-hidden rounded-lg bg-neutral-900 shadow-lg">
-          {networks.map((network) => {
-            const level = getSignalLevel(network.rssi);
+        {/* Wi-Fi List */}
+        <div className="flex-1 overflow-hidden overflow-y-auto rounded-lg">
+          {loading && (
+            <div className="bg-opacity-80 absolute inset-0 z-10 flex flex-col items-center justify-center bg-neutral-950">
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-neutral-600 border-t-white" />
+              <p className="mt-2 text-sm text-neutral-300">Scanning...</p>
+            </div>
+          )}
 
-            return (
-              <button
-                key={`network-${network.bssid}`}
-                type="button"
-                className="flex w-full cursor-pointer items-center space-x-3 px-6 py-3 transition-colors hover:bg-neutral-800 focus:outline-none"
-                onClick={() => handleConnect(network)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    handleConnect(network);
-                  }
-                }}
-                aria-label={`Connect to ${network.ssid || 'Hidden'} Wi-Fi network`}>
-                {/* Left side: Wi-Fi icon, SSID, Lock */}
-                <div className="flex items-center justify-center rounded-full bg-neutral-800 p-2 text-white">
-                  {getWifiIcon(level)}
-                </div>
-                <div className="flex grow items-center space-x-3">
-                  <div className="flex flex-col items-start gap-y-1">
-                    <span className="leading-tight font-medium">
-                      {network.ssid || '<Hidden>'}
-                    </span>
-                    <span className="text-xs text-neutral-400">
-                      Channel: {network.channel}
+          <ul className="divide-y divide-neutral-800 overflow-hidden rounded-lg bg-neutral-900 shadow-lg">
+            {networks.map((network) => {
+              const level = getSignalLevel(network.rssi);
+
+              return (
+                <button
+                  key={`network-${network.bssid}`}
+                  type="button"
+                  className="flex w-full cursor-pointer items-center space-x-3 px-6 py-3 transition-colors hover:bg-neutral-800 focus:outline-none"
+                  onClick={() => handleConnect(network)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      handleConnect(network);
+                    }
+                  }}
+                  aria-label={`Connect to ${network.ssid || 'Hidden'} Wi-Fi network`}>
+                  {/* Left side: Wi-Fi icon, SSID, Lock */}
+                  <div className="flex items-center justify-center rounded-full bg-neutral-800 p-2 text-white">
+                    {getWifiIcon(level)}
+                  </div>
+                  <div className="flex grow items-center space-x-3">
+                    <div className="flex flex-col items-start gap-y-1">
+                      <span className="leading-tight font-medium">
+                        {network.ssid || '<Hidden>'}
+                      </span>
+                      <span className="text-xs text-neutral-400">
+                        Channel: {network.channel}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col items-end gap-y-1">
+                    {network.secure && (
+                      <MdLock className="text-neutral-400" size={14} />
+                    )}
+                    {/* RSSI */}
+                    <span className="text-sm text-neutral-400">
+                      {network.rssi} dBm
                     </span>
                   </div>
-                </div>
-                <div className="flex flex-col items-end gap-y-1">
-                  {network.secure && (
-                    <MdLock className="text-neutral-400" size={14} />
-                  )}
-                  {/* RSSI */}
-                  <span className="text-sm text-neutral-400">
-                    {network.rssi} dBm
-                  </span>
-                </div>
-              </button>
-            );
-          })}
-        </ul>
+                </button>
+              );
+            })}
+          </ul>
+        </div>
       </div>
     </div>
   );
