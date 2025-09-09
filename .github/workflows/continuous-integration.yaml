@@ -14,7 +14,7 @@ on:
 jobs:
   ci:
     name: Continuous Integration
-    runs-on: ubuntu-latest # Use latest Ubuntu runner
+    runs-on: macos-latest # Use latest macOS runner
 
     steps:
       # Step 1: Checkout the repository code
@@ -50,3 +50,5 @@ jobs:
       # Step 7: Build the project for production
       - name: Build Production
         run: pnpm run build
+        env:
+          TAURI_SKIP_PROMPTS: true
