@@ -28,13 +28,13 @@ do {
         var secure = false
 
         // macOS Ventura (13+) introduced `supportedSecurityTypes`
-        if network.responds(to: Selector(("supportedSecurityTypes"))) {
+        if network.responds(to: NSSelectorFromString("supportedSecurityTypes")) {
             if let securityTypes = network.value(forKey: "supportedSecurityTypes") as? Set<Int> {
                 secure = !securityTypes.isEmpty
             }
         }
         // Older macOS versions use `security` property
-        else if network.responds(to: Selector(("security"))) {
+        else if network.responds(to: NSSelectorFromString("security")) {
             if let securityNumber = network.value(forKey: "security") as? Int {
                 secure = securityNumber != 0
             }

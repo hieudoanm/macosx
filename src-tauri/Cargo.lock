@@ -1324,9 +1324,9 @@ dependencies = [
 
 [[package]]
 name = "glib"
-version = "0.21.3"
+version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e1f2cbc4577536c849335878552f42086bfd25a8dcd6f54a18655cf818b20c8f"
+checksum = "690e8bcf8a819b5911d6ae79879226191d01253a4f602748072603defd5b9553"
 dependencies = [
  "bitflags 2.9.4",
  "futures-channel",
@@ -2033,7 +2033,7 @@ dependencies = [
  "chrono",
  "copypasta",
  "dirs",
- "glib 0.21.3",
+ "glib 0.21.0",
  "log",
  "serde",
  "serde_json",

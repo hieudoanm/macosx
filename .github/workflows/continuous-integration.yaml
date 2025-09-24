@@ -49,6 +49,6 @@ jobs:
 
       # Step 7: Build the project for production
       - name: Build Production
-        run: pnpm run tauri:build
+        run: pnpm run build:tauri
         env:
           TAURI_SKIP_PROMPTS: true
