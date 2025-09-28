@@ -41,11 +41,11 @@ importers:
         specifier: 24.5.2
         version: 24.5.2
       '@types/react':
-        specifier: 19.1.14
-        version: 19.1.14
+        specifier: 19.1.15
+        version: 19.1.15
       '@types/react-dom':
         specifier: 19.1.9
-        version: 19.1.9(@types/react@19.1.14)
+        version: 19.1.9(@types/react@19.1.15)
       docsify-cli:
         specifier: 4.4.4
         version: 4.4.4
@@ -578,8 +578,8 @@ packages:
     peerDependencies:
       '@types/react': ^19.0.0
 
-  '@types/react@19.1.14':
-    resolution: {integrity: sha512-ukd93VGzaNPMAUPy0gRDSC57UuQbnH9Kussp7HBjM06YFi9uZTFhOvMSO2OKqXm1rSgzOE+pVx1k1PYHGwlc8Q==}
+  '@types/react@19.1.15':
+    resolution: {integrity: sha512-+kLxJpaJzXybyDyFXYADyP1cznTO8HSuBpenGlnKOAkH4hyNINiywvXS/tGJhsrGGP/gM185RA3xpjY0Yg4erA==}
 
   '@typescript-eslint/eslint-plugin@8.42.0':
     resolution: {integrity: sha512-Aq2dPqsQkxHOLfb2OPv43RnIvfj05nw8v/6n3B2NABIPpHnjQnaLo9QGMTvml+tv4korl/Cjfrb/BYhoL8UUTQ==}
@@ -3134,11 +3134,11 @@ snapshots:
     dependencies:
       undici-types: 7.12.0
 
-  '@types/react-dom@19.1.9(@types/react@19.1.14)':
+  '@types/react-dom@19.1.9(@types/react@19.1.15)':
     dependencies:
-      '@types/react': 19.1.14
+      '@types/react': 19.1.15
 
-  '@types/react@19.1.14':
+  '@types/react@19.1.15':
     dependencies:
       csstype: 3.1.3
 
