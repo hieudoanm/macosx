@@ -44,7 +44,7 @@
     "@tailwindcss/postcss": "4.1.13",
     "@tauri-apps/cli": "2.8.4",
     "@types/node": "24.6.0",
-    "@types/react": "19.1.15",
+    "@types/react": "19.1.16",
     "@types/react-dom": "19.1.9",
     "docsify-cli": "4.4.4",
     "eslint": "9.36.0",
