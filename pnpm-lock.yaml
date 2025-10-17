@@ -6,7 +6,7 @@ settings:
 
 overrides:
   got: 14.6.0
-  marked: 16.4.0
+  marked: 16.4.1
 
 importers:
 
@@ -1866,8 +1866,8 @@ packages:
     resolution: {integrity: sha512-g3FeP20LNwhALb/6Cz6Dd4F2ngze0jz7tbzrD2wAV+o9FeNHe4rL+yK2md0J/fiSf1sa1ADhXqi5+oVwOM/eGw==}
     engines: {node: '>=8'}
 
-  marked@16.4.0:
-    resolution: {integrity: sha512-CTPAcRBq57cn3R8n3hwc2REddc28hjR7RzDXQ+lXLmMJYqn20BaI2cGw6QjgZGIgVfp2Wdfw4aMzgNteQ6qJgQ==}
+  marked@16.4.1:
+    resolution: {integrity: sha512-ntROs7RaN3EvWfy3EZi14H4YxmT6A5YvywfhO+0pm+cH/dnSQRmdAmoFIc3B9aiwTehyk7pESH4ofyBY+V5hZg==}
     engines: {node: '>= 20'}
     hasBin: true
 
@@ -3687,7 +3687,7 @@ snapshots:
 
   docsify@4.13.1:
     dependencies:
-      marked: 16.4.0
+      marked: 16.4.1
       medium-zoom: 1.1.0
       opencollective-postinstall: 2.0.3
       prismjs: 1.30.0
@@ -4609,7 +4609,7 @@ snapshots:
     dependencies:
       semver: 6.3.1
 
-  marked@16.4.0: {}
+  marked@16.4.1: {}
 
   math-intrinsics@1.1.0: {}
 
