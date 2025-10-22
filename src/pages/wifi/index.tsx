@@ -56,10 +56,6 @@ const WiFiPage: NextPage = () => {
       networks: WifiNetwork[];
     }>({ loading: false, error: null, networks: [] });
 
-  useEffect(() => {
-    scanNetworks();
-  }, []);
-
   const scanNetworks = async () => {
     try {
       setState((prev) => ({ ...prev, loading: true, error: null }));
@@ -71,6 +67,10 @@ const WiFiPage: NextPage = () => {
       setState({ loading: false, error: String(error), networks: [] });
     }
   };
+
+  useEffect(() => {
+    scanNetworks();
+  }, []);
 
   const handleConnect = async (network: WifiNetwork) => {
     console.log('Connecting to network:', network);
