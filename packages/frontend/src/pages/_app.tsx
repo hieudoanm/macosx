@@ -1,4 +1,4 @@
-import '@wifi/styles/globals.css';
+import '@macosx/styles/globals.css';
 import type { AppProps } from 'next/app';
 import { FC } from 'react';
 
