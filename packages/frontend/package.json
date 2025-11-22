@@ -58,7 +58,7 @@
     "typescript": "5.9.3"
   },
   "resolutions": {
-    "got": "14.6.4",
+    "got": "14.6.5",
     "marked": "17.0.1"
   }
 }
