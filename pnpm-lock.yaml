@@ -15,7 +15,7 @@ importers:
         specifier: 2.6.1
         version: 2.6.1
 
-  packages/frontend:
+  packages/app:
     dependencies:
       '@tauri-apps/api':
         specifier: 2.9.0
