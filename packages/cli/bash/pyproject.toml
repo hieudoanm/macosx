@@ -1,0 +1,9 @@
+[project]
+name = "bash"
+version = "0.0.1"
+description = "bash shortcuts"
+readme = "README.md"
+requires-python = "==3.14.1"
+dependencies = [
+    "ruff==0.14.8",
+]
