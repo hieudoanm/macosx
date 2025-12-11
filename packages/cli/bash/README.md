@@ -477,18 +477,19 @@ list_packages() {
 }
 
 update_repos() {
-  # Auto-detect all directories containing a .git folder (recursive)
-  local DIRS
-  DIRS=$(find . -type d -name ".git" -exec dirname {} \;)
+  echo "🔍 Scanning for git repos..."
 
-  echo "🔍 Auto-detected git repos:"
-  echo "$DIRS"
-  echo
+  # Find all .git directories and output clean paths
+  find . -type d -name ".git" -exec dirname {} \; | while IFS= read -r dir; do
 
-  for dir in $DIRS; do
     echo "-----------------------------------"
-    echo "🔄 Processing $dir"
+    echo "🔄 Processing: $dir"
     echo "-----------------------------------"
+
+    if [ ! -d "$dir" ]; then
+      echo "❌ Skipping (directory no longer exists): $dir"
+      continue
+    fi
 
     cd "$dir" || continue
 
@@ -496,7 +497,7 @@ update_repos() {
     pnpm update --latest -r
 
     git add -A
-    git commit -m "update packages" || echo "⚠️ No changes to commit"
+    git commit -m "update packages" 2>/dev/null || echo "⚠️ No changes to commit"
     git push
 
     cd - > /dev/null
