@@ -28,28 +28,29 @@ list_packages() {
 update_repos() {
   echo "🔍 Scanning for git repos..."
 
-  # Find all .git directories and output clean paths
-  find . -type d -name ".git" -exec dirname {} \; | while IFS= read -r dir; do
+  find . -type d -name ".git" -exec dirname {} \; \
+    | sort -f \
+    | while IFS= read -r dir; do
 
-    echo "-----------------------------------"
-    echo "🔄 Processing: $dir"
-    echo "-----------------------------------"
+      echo "-----------------------------------"
+      echo "🔄 Processing: $dir"
+      echo "-----------------------------------"
 
-    if [ ! -d "$dir" ]; then
-      echo "❌ Skipping (directory no longer exists): $dir"
-      continue
-    fi
+      if [ ! -d "$dir" ]; then
+        echo "❌ Skipping (directory no longer exists): $dir"
+        continue
+      fi
 
-    cd "$dir" || continue
+      cd "$dir" || continue
 
-    git pull origin --rebase
-    pnpm update --latest -r
+      git pull origin --rebase
+      pnpm update --latest -r
 
-    git add -A
-    git commit -m "update packages" 2>/dev/null || echo "⚠️ No changes to commit"
-    git push
+      git add -A
+      git commit -m "update packages" 2>/dev/null || echo "⚠️ No changes to commit"
+      git push
 
-    cd - > /dev/null
-    echo
-  done
+      cd - > /dev/null
+      echo
+    done
 }
