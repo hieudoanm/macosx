@@ -469,6 +469,24 @@ update_repos() {
     done
 }
 
+clipboard() {
+  local content
+
+  if command -v pbpaste >/dev/null; then
+    content="$(pbpaste)"
+  elif command -v wl-paste >/dev/null; then
+    content="$(wl-paste)"
+  elif command -v xclip >/dev/null; then
+    content="$(xclip -selection clipboard -o)"
+  else
+    echo "❌ Clipboard tool not found" >&2
+    return 2
+  fi
+
+  [[ -n "$content" ]] || return 1
+  printf "%s" "$content"
+}
+
 # Terraform Shortcuts (Compact)
 
 alias tf='terraform'
