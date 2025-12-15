@@ -1,11 +1,11 @@
 {
-  "name": "@macos/extensions",
+  "name": "@macosx/app",
   "version": "0.0.1",
-  "description": "macos extensions",
+  "description": "macosx",
   "keywords": [
-    "macos"
+    "macosx"
   ],
-  "homepage": "https://github.com/hieudoanm/macosx#readme",
+  "homepage": "https://hieudoanm.github.io/macosx",
   "bugs": {
     "url": "https://github.com/hieudoanm/macosx/issues"
   },
@@ -20,9 +20,11 @@
     "node": "24.12.0"
   },
   "scripts": {
+    "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "format": "turbo run format",
+    "test": "turbo run test",
     "build": "turbo run build",
+    "format": "turbo run format",
     "prepare": "husky || true"
   },
   "devDependencies": {
