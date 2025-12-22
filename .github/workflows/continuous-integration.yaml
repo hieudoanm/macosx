@@ -4,12 +4,12 @@ name: Continuous Integration
 on:
   push:
     branches:
-      - 'master' # Main production branch
-      - 'develop' # Main development branch
-      - 'hotfix/**' # Hotfix branches
-      - 'feature/**' # Feature branches
-      - 'renovate/**' # Automated dependency updates (Renovate bot)
-      - 'dependabot/**' # Automated dependency updates (Dependabot)
+      - "master" # Main production branch
+      - "develop" # Main development branch
+      - "hotfix/**" # Hotfix branches
+      - "feature/**" # Feature branches
+      - "renovate/**" # Automated dependency updates (Renovate bot)
+      - "dependabot/**" # Automated dependency updates (Dependabot)
 
 jobs:
   ci:
@@ -25,19 +25,19 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v6
         with:
-          go-version: '1.25.5' # Specify Go version
+          go-version: "1.25.5" # Specify Go version
 
       # Step 3: Set up pnpm (for Node.js project dependencies)
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: '10.26.1' # Specify pnpm version
+          version: "10.26.1" # Specify pnpm version
 
       # Step 4: Set up Node.js environment
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: '24.12.0' # Specify Node.js version
+          node-version: "24.12.0" # Specify Node.js version
 
       # Step 5: Install project dependencies via pnpm
       - name: Install Dependencies
@@ -49,6 +49,6 @@ jobs:
 
       # Step 7: Build the project for production
       - name: Build Production
-        run: pnpm run build:tauri
+        run: pnpm run build
         env:
           TAURI_SKIP_PROMPTS: true
