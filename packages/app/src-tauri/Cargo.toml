@@ -23,6 +23,6 @@ copypasta = { version = "=0.10.2" }
 dirs = { version = "=6.0.0" }
 log = { version = "=0.4.29" }
 serde = { version = "=1.0.228", features = ["derive"] }
-serde_json = { version ="=1.0.145" }
+serde_json = { version ="=1.0.146" }
 tauri = { version = "=2.9.5", features = ["macos-private-api"] }
 tauri-plugin-log = { version = "=2.7.1" }
