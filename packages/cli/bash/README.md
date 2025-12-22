@@ -8,7 +8,6 @@ curl -fsSL https://raw.githubusercontent.com/hieudoanm/bash/master/install.sh | 
 
 ```bash
 #!/usr/bin/env bash
-set -eo pipefail
 
 # Colors
 GREEN="\033[0;32m"
@@ -523,6 +522,9 @@ clipboard() {
   [[ -n "$content" ]] || return 1
   printf "%s" "$content"
 }
+
+alias back="cd .."
+alias home="cd ~"
 ```
 
 ## terraform

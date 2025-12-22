@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -eo pipefail
 
 # Colors
 GREEN="\033[0;32m"

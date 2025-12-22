@@ -72,3 +72,6 @@ clipboard() {
   [[ -n "$content" ]] || return 1
   printf "%s" "$content"
 }
+
+alias back="cd .."
+alias home="cd ~"
