@@ -31,16 +31,23 @@ function gcommitall() {
 }
 
 function gpullall() {
-  for folder in $(ls -d */)
-  do
-    if [ -d "$folder" ]; then
-      echo "----- $folder -----";
-      cd $folder;
-      git checkout master;
-      git fetch origin master;
-      git pull origin master;
-      cd ..;
-    fi
+  local branch="${1:-master}"
+
+  find . \
+    -type d -name .git -prune \
+    -print |
+  while read -r gitdir; do
+    repo="$(dirname "$gitdir")"
+
+    echo "----- $repo ($branch) -----"
+
+    (
+      cd "$repo" || exit
+
+      git checkout "$branch" &&
+      git fetch origin "$branch" &&
+      git pull origin "$branch"
+    ) || echo "⚠️  Failed in $repo"
   done
 }
 
