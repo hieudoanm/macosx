@@ -150,8 +150,13 @@ function gcommitall() {
   done
 }
 
-function gpullall() {
+gpullall() {
   local branch="${1:-master}"
+
+  echo "========================================"
+  echo "🚀 Starting gpullall (branch: $branch)"
+  echo "📁 Root: $(pwd)"
+  echo "========================================"
 
   find . \
     -type d -name .git -prune \
@@ -159,16 +164,45 @@ function gpullall() {
   while read -r gitdir; do
     repo="$(dirname "$gitdir")"
 
-    echo "----- $repo ($branch) -----"
+    echo
+    echo "----------------------------------------"
+    echo "📦 Repository found: $repo"
+    echo "🔀 Target branch: $branch"
+    echo "----------------------------------------"
 
     (
-      cd "$repo" || exit
+      echo "➡️  Entering $repo"
+      cd "$repo" || {
+        echo "❌ Failed to cd into $repo"
+        exit 1
+      }
 
-      git checkout "$branch" &&
-      git fetch origin "$branch" &&
-      git pull origin "$branch"
-    ) || echo "⚠️  Failed in $repo"
+      echo "✔️  Checking out branch: $branch"
+      git checkout "$branch" || {
+        echo "❌ git checkout failed in $repo"
+        exit 1
+      }
+
+      echo "⬇️  Fetching from origin/$branch"
+      git fetch origin "$branch" || {
+        echo "❌ git fetch failed in $repo"
+        exit 1
+      }
+
+      echo "🔄 Pulling latest changes"
+      git pull origin "$branch" || {
+        echo "❌ git pull failed in $repo"
+        exit 1
+      }
+
+      echo "✅ Success: $repo"
+    ) || echo "⚠️  Repository failed: $repo"
   done
+
+  echo
+  echo "========================================"
+  echo "🏁 gpullall finished"
+  echo "========================================"
 }
 
 function gcurrent() {
