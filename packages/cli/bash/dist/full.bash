@@ -480,33 +480,51 @@ list_packages() {
 }
 
 update_repos() {
-  echo "🔍 Scanning for git repos..."
+  echo "🔍 Scanning deeply for git repositories..."
 
-  find . -type d -name ".git" -exec dirname {} \; \
-    | sort -f \
-    | while IFS= read -r dir; do
+  local root
+  root="$(pwd)"
 
-      echo "-----------------------------------"
-      echo "🔄 Processing: $dir"
-      echo "-----------------------------------"
+  find "$root" \
+    -type d -name ".git" \
+    -not -path "*/.git/*" \
+    -print0 |
+  while IFS= read -r -d '' gitdir; do
+    dir="$(dirname "$gitdir")"
 
-      if [ ! -d "$dir" ]; then
-        echo "❌ Skipping (directory no longer exists): $dir"
-        continue
-      fi
+    echo "-----------------------------------"
+    echo "🔄 Processing: $dir"
+    echo "-----------------------------------"
 
-      cd "$dir" || continue
+    if [ ! -d "$dir" ]; then
+      echo "❌ Skipping (directory no longer exists)"
+      continue
+    fi
+
+    (
+      cd "$dir" || exit 0
+
+      # Ensure it's a real git repo
+      git rev-parse --is-inside-work-tree >/dev/null 2>&1 || {
+        echo "⚠️ Not a valid git repository"
+        exit 0
+      }
 
       git pull origin --rebase
-      pnpm update --latest -r
+
+      if [ -f "pnpm-workspace.yaml" ] || [ -d "node_modules" ]; then
+        pnpm update --latest -r
+      fi
 
       git add -A
-      git commit -m "update packages" 2>/dev/null || echo "⚠️ No changes to commit"
-      git push
+      git commit -m "update packages" 2>/dev/null \
+        || echo "⚠️ No changes to commit"
 
-      cd - > /dev/null
-      echo
-    done
+      git push
+    )
+
+    echo
+  done
 }
 
 clipboard() {
