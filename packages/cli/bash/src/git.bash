@@ -16,21 +16,50 @@ function gcloneall() {
 }
 
 function gcommitall() {
-  for folder in $(ls -d */)
-  do
-    if [ -d "$folder" ]; then
-        echo "----- $folder -----";
-        cd $folder;
-        git add -A;
-        git status;
-        git commit -m '$1';
-        git push
-        cd ..;
-    fi
+  if [ -z "$1" ]; then
+    echo "❌  Usage: gcommitall \"commit message\""
+    return 1
+  fi
+
+  echo "🚀  Starting recursive Git commit"
+  echo "📝  Commit message: \"$1\""
+  echo "🔍  Scanning for repositories..."
+  echo
+
+  find . -type d -name ".git" -exec dirname {} \; | while read -r repo; do
+    echo "══════════════════════════════════════"
+    echo "📂  Repo found: $repo"
+    echo "➡️   Entering repo..."
+
+    (
+      cd "$repo" || {
+        echo "💥  Failed to enter $repo — skipping"
+        exit
+      }
+
+      echo "📦  Staging changes..."
+      git add -A
+
+      echo "🔎  Checking staged diff..."
+      if git diff --cached --quiet; then
+        echo "😴  No changes to commit"
+      else
+        echo "✍️   Committing changes..."
+        git commit -m "$1" && echo "✅  Commit successful"
+
+        echo "📡  Pushing to remote..."
+        git push && echo "🎉  Push successful"
+      fi
+    )
+
+    echo "⬅️   Leaving repo"
+    echo
   done
+
+  echo "🏁  All repositories processed"
 }
 
-gpullall() {
+function gpullall() {
   local branch="${1:-master}"
 
   echo "========================================"
