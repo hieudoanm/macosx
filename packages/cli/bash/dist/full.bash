@@ -17,259 +17,276 @@ brew-update() {
     esac
   done
 
-  echo -e "${BLUE}==> Updating Homebrew...${RESET}"
+  echo -e "🍺🔄 ${BLUE}==> Updating Homebrew...${RESET}"
   brew update
 
   if [[ $NO_UPGRADE -eq 0 ]]; then
-    echo -e "${BLUE}==> Upgrading formulae...${RESET}"
+    echo -e "⬆️📦 ${BLUE}==> Upgrading formulae...${RESET}"
     brew upgrade
   else
-    echo -e "${BLUE}==> Skipping upgrade step${RESET}"
+    echo -e "⏭️😴 ${BLUE}==> Skipping upgrade step${RESET}"
   fi
 
-  echo -e "${BLUE}==> Cleaning up...${RESET}"
+  echo -e "🧹✨ ${BLUE}==> Cleaning up...${RESET}"
   brew cleanup
 
-  echo -e "${GREEN}✔ Brew update finished.${RESET}"
+  echo -e "✅🎉 ${GREEN}✔ Brew update finished.${RESET}"
 }
 
-# Example usage:
-#   brew-update
-#   brew-update --no-upgrade
-
 brew-doctor() {
-  echo -e "${BLUE}==> Running brew doctor...${RESET}"
+  echo -e "🩺🔍 ${BLUE}==> Running brew doctor...${RESET}"
   brew doctor || true
-  echo -e "${GREEN}✔ Brew doctor finished.${RESET}"
+  echo -e "🧠✅ ${GREEN}✔ Brew doctor finished.${RESET}"
 }
 
 brew-autoremove() {
-  echo -e "${BLUE}==> Removing unused dependencies...${RESET}"
+  echo -e "🗑️📦 ${BLUE}==> Removing unused dependencies...${RESET}"
   brew autoremove
-  echo -e "${GREEN}✔ Autoremove completed.${RESET}"
+  echo -e "✨✅ ${GREEN}✔ Autoremove completed.${RESET}"
 }
 
 brew-update-casks() {
-  echo -e "${BLUE}==> Updating casks...${RESET}"
+  echo -e "🪟⬆️ ${BLUE}==> Updating casks...${RESET}"
   brew upgrade --cask
-  echo -e "${GREEN}✔ Cask upgrade completed.${RESET}"
+  echo -e "🍾✅ ${GREEN}✔ Cask upgrade completed.${RESET}"
 }
 
 brew-outdated() {
-  echo -e "${BLUE}==> Outdated formulae:${RESET}"
+  echo -e "⏰📦 ${BLUE}==> Outdated formulae:${RESET}"
   brew outdated || true
 
-  echo -e "${BLUE}==> Outdated casks:${RESET}"
+  echo -e "⏰🪟 ${BLUE}==> Outdated casks:${RESET}"
   brew outdated --cask || true
 }
 
 brew-repair() {
-  echo -e "${BLUE}==> Checking and repairing brew installation...${RESET}"
+  echo -e "🛠️🔎 ${BLUE}==> Checking and repairing brew installation...${RESET}"
   brew missing || true
   brew doctor || true
   brew update-reset
-  echo -e "${GREEN}✔ Brew repair completed.${RESET}"
+  echo -e "🧯🔧 ${GREEN}✔ Brew repair completed.${RESET}"
 }
 
 brew-purge-cache() {
-  echo -e "${BLUE}==> Purging Homebrew cache...${RESET}"
+  echo -e "🔥🧹 ${BLUE}==> Purging Homebrew cache...${RESET}"
   brew cleanup -s
   rm -rf "$(brew --cache)"/*
-  echo -e "${GREEN}✔ Cache purged.${RESET}"
+  echo -e "🗑️💨 ${GREEN}✔ Cache purged.${RESET}"
 }
 
 brew-space() {
-  echo -e "${BLUE}==> Homebrew disk usage:${RESET}"
+  echo -e "💽📊 ${BLUE}==> Homebrew disk usage:${RESET}"
   du -sh "$(brew --prefix)" 2>/dev/null
   du -sh "$(brew --cache)" 2>/dev/null
 }
 
 brew-export() {
-  echo -e "${BLUE}==> Exporting Brewfile...${RESET}"
+  echo -e "📤📜 ${BLUE}==> Exporting Brewfile...${RESET}"
   brew bundle dump --file=~/Brewfile --force
-  echo -e "${GREEN}✔ Brewfile saved to ~/Brewfile.${RESET}"
+  echo -e "💾✅ ${GREEN}✔ Brewfile saved to ~/Brewfile.${RESET}"
 }
 
-### Docker Shortcuts ###
+### 🐳⚙️ Docker Shortcuts ⚙️🐳 ###
 
-# List containers / images
-alias dps='docker ps'
-alias dpsa='docker ps -a'
-alias dimg='docker images'
+# 📦 List containers / images
+alias dps='echo "📦🚢 Running containers:" && docker ps'
+alias dpsa='echo "📦🧊 All containers (including stopped):" && docker ps -a'
+alias dimg='echo "🖼️🐳 Docker images:" && docker images'
 
-# Docker Compose shortcut
-alias dc='docker compose'
+# 🧩 Docker Compose shortcut
+alias dc='echo "🧩🐳 Docker Compose" && docker compose'
 
-# Kill all running containers
-alias dkillall='docker kill $(docker ps -q) 2>/dev/null || echo "No containers to kill."'
+# 💀 Kill all running containers
+alias dkillall='echo "💀🔥 Killing all running containers..." && docker kill $(docker ps -q) 2>/dev/null || echo "😴✨ No containers to kill."'
 
-# Remove all stopped containers
-alias drmall='CONTAINERS=$(docker ps -aq); \
-  [ -n "$CONTAINERS" ] && docker rm -f $CONTAINERS || echo "No containers to remove."'
+# 🧹 Remove all stopped containers
+alias drmall='echo "🧹📦 Removing all containers..." && \
+  CONTAINERS=$(docker ps -aq); \
+  [ -n "$CONTAINERS" ] && docker rm -f $CONTAINERS || echo "😴✨ No containers to remove."'
 
-# Remove all Docker images
-alias drmiall='IMAGES=$(docker images -q); \
-  [ -n "$IMAGES" ] && docker rmi -f $IMAGES || echo "No images to remove."'
+# 🔥 Remove all Docker images
+alias drmiall='echo "🔥🖼️ Removing all Docker images..." && \
+  IMAGES=$(docker images -q); \
+  [ -n "$IMAGES" ] && docker rmi -f $IMAGES || echo "😴✨ No images to remove."'
 
-# Stop all containers (safe version)
-alias dstopall='docker stop $(docker ps -q) 2>/dev/null || echo "No containers to stop."'
+# 🛑 Stop all containers (safe)
+alias dstopall='echo "🛑🚢 Stopping all running containers..." && docker stop $(docker ps -q) 2>/dev/null || echo "😴✨ No containers to stop."'
 
-# Remove dangling resources
-alias dclean='docker system prune -f'
+# 🧽 Remove dangling resources
+alias dclean='echo "🧽🧼 Cleaning dangling Docker resources..." && docker system prune -f'
 
-# Full cleanup: containers, images, networks, build cache
-alias dfullclean='docker system prune -a --volumes -f'
+# 💣 Full cleanup: containers, images, networks, volumes, cache
+alias dfullclean='echo "💣☢️ FULL Docker cleanup (containers, images, volumes, networks)..." && docker system prune -a --volumes -f'
 
-# Git
+### 🧬🐙 Git Power Toolkit 🐙🧬 ###
 
+# 🧲 Clone multiple repos
 function gcloneall() {
   username="hieudoanm"
   folders=(
     "hieudoanm"
     "hieudoanm.github.io"
   )
-  for folder in "${folders[@]}"
-  do
-    echo "----- $folder -----";
-    git clone git@github.com:$username/$folder.git
+
+  echo "🚀📥 Starting mass clone for user: $username"
+  for folder in "${folders[@]}"; do
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "📦➡️  Cloning repo: $folder"
+    git clone git@github.com:$username/$folder.git && echo "✅🎉 Clone completed"
   done
+  echo "🏁📂 All repositories cloned"
 }
 
+# 🌍 Commit everything, everywhere
 function gcommitall() {
-  for folder in $(ls -d */)
-  do
-    if [ -d "$folder" ]; then
-        echo "----- $folder -----";
-        cd $folder;
-        git add -A;
-        git status;
-        git commit -m '$1';
-        git push
-        cd ..;
-    fi
+  if [ -z "$1" ]; then
+    echo "❌📝 Usage: gcommitall \"commit message\""
+    return 1
+  fi
+
+  echo "🚀🌍 Starting recursive Git commit"
+  echo "📝💬 Commit message: \"$1\""
+  echo "🔍🧭 Scanning for repositories..."
+  echo
+
+  find . -type d -name ".git" -exec dirname {} \; | while read -r repo; do
+    echo "══════════════════════════════════════"
+    echo "📂🧠 Repo found: $repo"
+    echo "➡️🚪 Entering repo..."
+
+    (
+      cd "$repo" || {
+        echo "💥🚫 Failed to enter $repo — skipping"
+        exit
+      }
+
+      echo "📦➕ Staging all changes..."
+      git add -A
+
+      echo "🔎🧪 Checking staged diff..."
+      if git diff --cached --quiet; then
+        echo "😴🟡 No changes detected"
+      else
+        echo "✍️🧾 Committing changes..."
+        git commit -m "$1" && echo "✅🎯 Commit successful"
+
+        echo "📡⬆️ Pushing to remote..."
+        git push && echo "🎉🚀 Push successful"
+      fi
+    )
+
+    echo "⬅️🚪 Leaving repo"
+    echo
   done
+
+  echo "🏁🎊 All repositories processed"
 }
 
-gpullall() {
+# ⬇️🌿 Pull all repos
+function gpullall() {
   local branch="${1:-master}"
 
   echo "========================================"
-  echo "🚀 Starting gpullall (branch: $branch)"
-  echo "📁 Root: $(pwd)"
+  echo "🚀⬇️ gpullall started"
+  echo "🌿 Target branch: $branch"
+  echo "📁 Root directory: $(pwd)"
   echo "========================================"
 
-  find . \
-    -type d -name .git -prune \
-    -print |
+  find . -type d -name .git -prune -print |
   while read -r gitdir; do
     repo="$(dirname "$gitdir")"
 
     echo
     echo "----------------------------------------"
-    echo "📦 Repository found: $repo"
-    echo "🔀 Target branch: $branch"
+    echo "📦📍 Repository: $repo"
+    echo "🔀🌿 Branch: $branch"
     echo "----------------------------------------"
 
     (
-      echo "➡️  Entering $repo"
+      echo "➡️🚪 Entering repository"
       cd "$repo" || {
-        echo "❌ Failed to cd into $repo"
+        echo "❌🚫 cd failed"
         exit 1
       }
 
-      echo "✔️  Checking out branch: $branch"
-      git checkout "$branch" || {
-        echo "❌ git checkout failed in $repo"
-        exit 1
-      }
+      echo "✔️🔁 Checkout branch"
+      git checkout "$branch" || exit 1
 
-      echo "⬇️  Fetching from origin/$branch"
-      git fetch origin "$branch" || {
-        echo "❌ git fetch failed in $repo"
-        exit 1
-      }
+      echo "⬇️📡 Fetching updates"
+      git fetch origin "$branch" || exit 1
 
-      echo "🔄 Pulling latest changes"
-      git pull origin "$branch" || {
-        echo "❌ git pull failed in $repo"
-        exit 1
-      }
+      echo "🔄📥 Pulling latest changes"
+      git pull origin "$branch" || exit 1
 
-      echo "✅ Success: $repo"
-    ) || echo "⚠️  Repository failed: $repo"
+      echo "✅🎉 Repo up-to-date"
+    ) || echo "⚠️🔥 Repository failed: $repo"
   done
 
   echo
   echo "========================================"
-  echo "🏁 gpullall finished"
+  echo "🏁🎯 gpullall finished"
   echo "========================================"
 }
 
+# 🌿📍 Current branch
 function gcurrent() {
-  echo `git branch | sed -n '/\* /s///p'`
+  echo "🌿📍 Current branch: $(git branch | sed -n '/\* /s///p')"
 }
 
-# gpushtag <tag-name>
+# 🏷️🚀 Push tag
 function gpushtag() {
+  echo "🏷️🚀 Creating & pushing tag: $1"
   git checkout main
-  git tag -a $1 -m 'v$1'
+  git tag -a $1 -m "v$1"
   git push origin $1
 }
 
-# gtags <filter-string>
+# 🏷️🔍 List tags
 function gtags() {
-  TAGS=`git tag | grep $1`
-  echo $TAGS
+  echo "🏷️📜 Matching tags:"
+  git tag | grep $1
 }
 
-# gtagdelete <branch-name>
+# ❌🏷️ Delete tag
 function gdeltag() {
+  echo "❌🏷️ Deleting tag: $1"
   git tag -d $1
   git push origin :refs/tags/$1
 }
 
-# gfetch <branch-name>
+# 🌐⬇️ Fetch branch
 function gfetch() {
+  echo "🌐⬇️ Fetching branch: $1"
   git fetch --prune origin $1
 }
 
-# gpull <branch-name>
-# function gpull() {
-#   git pull --prune origin $1
-# }
-
-# gpush <branch-name>
-# function gpush() {
-#   BRANCH=$(gcurrent)
-#   echo 'Current git branch $BRANCH'
-#   git push origin $BRANCH
-# }
-
-# gpushf <branch-name>
+# 🚨⬆️ Force push
 function gpushf() {
-  BRANCH=$(gcurrent)
-  echo "Current git branch $BRANCH"
+  BRANCH=$(gcurrent | awk '{print $NF}')
+  echo "🚨⬆️ Force pushing branch: $BRANCH"
   git push origin $BRANCH -f
 }
 
-# gbranch <branch-name>
+# 🌱➕ Create branch
 function gbranch() {
+  echo "🌱➕ Creating branch: $1"
   git branch $1
   git checkout $1
   git push --set-upstream origin $1
 }
 
-# gdelbranch <branch-name>
+# 🗑️🌿 Delete branch
 function gdelbranch() {
+  echo "🗑️🌿 Deleting branch: $1"
   git branch -d $1
   git branch -D $1
   git push origin -d -f $1
 }
 
-# gstashrebase
+# 🧳🔁 Stash + rebase
 function gstashrebase() {
-  BRANCH=$(gcurrent)
-  echo "Current git branch $BRANCH"
+  BRANCH=$(git branch | sed -n '/\* /s///p')
+  echo "🧳🔁 Rebasing branch: $BRANCH"
   git stash
   git checkout master
   git pull origin master
@@ -278,119 +295,134 @@ function gstashrebase() {
   git stash apply
 }
 
-# greset
+# 💣🧹 Hard reset
 function greset() {
+  echo "💣🧹 Resetting working tree"
   git reset --hard
   git clean -df
 }
 
-# grebase <branch-name>
+# 🔁🧬 Rebase branch
 function grebase() {
   DEST_BRANCH=$1
-  BRANCH=$(gcurrent)
+  BRANCH=$(git branch | sed -n '/\* /s///p')
+  echo "🔁🧬 Rebasing $BRANCH onto $DEST_BRANCH"
   git checkout $DEST_BRANCH
   git pull --rebase origin $DEST_BRANCH
   git checkout $BRANCH
   git rebase $DEST_BRANCH
 }
 
-# gmerge <branch-name>
+# 🔀🎯 Merge (squash)
 function gmerge() {
   DEST_BRANCH=$1
-  BRANCH=$(gcurrent)
+  BRANCH=$(git branch | sed -n '/\* /s///p')
+  echo "🔀🎯 Squash merge $BRANCH → $DEST_BRANCH"
   git checkout $DEST_BRANCH
   git merge --squash $BRANCH
   git commit -m "Merge branch $BRANCH"
   git push origin $DEST_BRANCH
 }
 
-# gclrhst <branch-name>
+# 🧼🧠 Clear history
 function gclrhst() {
   CURRENT=$(git rev-parse --abbrev-ref HEAD)
-  echo $CURRENT
   BRANCH=${1:-"$CURRENT"}
-  echo $BRANCH
-  git checkout --orphan new-$BRANCH # create a temporary branch
-  git add -A  # Add all files and commit them
+  echo "🧼🧠 Clearing history for branch: $BRANCH"
+
+  git checkout --orphan new-$BRANCH
+  git add -A
   git commit -m 'initial'
-  git branch -D $BRANCH # Deletes the master branch
-  git branch -m $BRANCH # Rename the current branch to master
-  git push -f --set-upstream origin $BRANCH # Force push master branch to Git server
+  git branch -D $BRANCH
+  git branch -m $BRANCH
+  git push -f --set-upstream origin $BRANCH
 }
 
-# gclearbranches
+# 🧹🌿 Clear local branches
 function gclearbranches() {
+  echo "🧹🌿 Removing all local branches except master"
   git branch | grep -v "master" | xargs git branch -D
 }
 
-# gremoteupdate
+# 🔗🌍 Update remote
 function gremoteupdate() {
+  echo "🔗🌍 Updating remote origin"
   git remote -v
   git remote set-url origin "$1"
   git remote -v
 }
 
-# Aliases for git commands
+### ⚡ Aliases ⚡ ###
 alias ga='git add'
 alias gco='git commit -am'
-alias gclean="git clean -df"
-alias gdh="git diff HEAD"
-alias gs="git status"
-alias gl="git log --graph --decorate --oneline"
+alias gclean='git clean -df'
+alias gdh='git diff HEAD'
+alias gs='echo "📊 Git status:" && git status'
+alias gl='git log --graph --decorate --oneline'
 alias gpull='git branch | sed -n "/\* /s///p" | xargs git pull --rebase origin'
-alias gsall="find /path/to/project -maxdepth 1 -mindepth 1 -type d -exec sh -c '(echo {} && cd {} && git status -s && echo)' \;"
 alias gpush='git branch | sed -n "/\* /s///p" | xargs git push origin --follow-tags'
 alias gb='git branch --sort=-committerdate | head -10'
 alias gc='git checkout'
 alias gcm='git checkout master'
 alias gt='git tag'
-alias gpushdocker='/usr/local/bin/tag-increment && git branch | sed -n "/\* /s///p" | xargs git push origin --follow-tags'
-alias glog="git log --graph --decorate --oneline"
-alias gsetemaillocal="git config --local user.email "
-alias gsetnamelocal="git config --local user.name "
-alias gsetemailglobal="git config --global user.email "
-alias gsetnameglobal="git config --global user.name "
+alias glog='git log --graph --decorate --oneline'
+alias gsetemaillocal='git config --local user.email '
+alias gsetnamelocal='git config --local user.name '
+alias gsetemailglobal='git config --global user.email '
+alias gsetnameglobal='git config --global user.name '
 
 # -------------------------------------
-# Compact Harness CLI Shortcuts
+# 🚀🧩 Compact Harness CLI Shortcuts 🧩🚀
 # -------------------------------------
 
-alias hrns='harness'
+alias hrns='harness'   # 🐎 Core Harness CLI
 
-hrns-login()     { harness login "$@"; }
-hrns-orgs()      { harness org list "$@"; }
-hrns-projs()     { harness project list "$@"; }
-hrns-pipes()     { harness pipeline list "$@"; }
-hrns-deploy()    { harness pipeline execute "$@"; }
-hrns-status()    { harness pipeline execution get "$@"; }
-hrns-envs()      { harness environment list "$@"; }
-hrns-secrets()   { harness secret list "$@"; }
-hrns-connect()   { harness connector list "$@"; }
+# 🔐 Authentication
+hrns-login()     { echo "🔐🚪 Logging into Harness..."; harness login "$@"; }
+
+# 🏢 Organization & Project
+hrns-orgs()      { echo "🏢📋 Listing organizations..."; harness org list "$@"; }
+hrns-projs()     { echo "📁📋 Listing projects..."; harness project list "$@"; }
+
+# 🚀 Pipelines
+hrns-pipes()     { echo "🧪📜 Listing pipelines..."; harness pipeline list "$@"; }
+hrns-deploy()    { echo "🚀🔥 Executing pipeline..."; harness pipeline execute "$@"; }
+hrns-status()    { echo "📊🔍 Fetching pipeline execution status..."; harness pipeline execution get "$@"; }
+
+# 🌱 Environments
+hrns-envs()      { echo "🌱📋 Listing environments..."; harness environment list "$@"; }
+
+# 🔐 Secrets & Connectors
+hrns-secrets()   { echo "🔑📜 Listing secrets..."; harness secret list "$@"; }
+hrns-connect()   { echo "🔌🌍 Listing connectors..."; harness connector list "$@"; }
 
 
 # -------------------------------------
-# Auto-Completion Helpers
+# 🧠⚙️ Auto-Completion Helpers
 # -------------------------------------
 
-# Pull a list of values using Harness CLI, output only the names
+# 🏢 Fetch org identifiers
 _hrns_list_orgs() {
   harness org list 2>/dev/null | awk '{print $1}' | tail -n +2
 }
 
+# 📁 Fetch project identifiers
 _hrns_list_projects() {
   harness project list 2>/dev/null | awk '{print $1}' | tail -n +2
 }
 
+# 🧪 Fetch pipeline identifiers
 _hrns_list_pipelines() {
   harness pipeline list 2>/dev/null | awk '{print $1}' | tail -n +2
 }
 
+# 🌱 Fetch environment identifiers
 _hrns_list_envs() {
   harness environment list 2>/dev/null | awk '{print $1}' | tail -n +2
 }
 
 # -------------------------------------
-# Auto-Completion Definitions
+# 🧩✨ Auto-Completion Definitions
 # -------------------------------------
 
 _hrns_orgs_complete() {
@@ -410,77 +442,119 @@ _hrns_envs_complete() {
 }
 
 # -------------------------------------
-# Bind completion to functions
+# 🔗🧠 Bind completion to commands
 # -------------------------------------
 
-complete -F _hrns_orgs_complete   hrns-orgs
-complete -F _hrns_projs_complete  hrns-projs
-complete -F _hrns_pipes_complete  hrns-pipes
-complete -F _hrns_pipes_complete  hrns-deploy
-complete -F _hrns_pipes_complete  hrns-status
-complete -F _hrns_envs_complete   hrns-envs
+complete -F _hrns_orgs_complete   hrns-orgs     # 🏢
+complete -F _hrns_projs_complete  hrns-projs    # 📁
+complete -F _hrns_pipes_complete  hrns-pipes    # 🧪
+complete -F _hrns_pipes_complete  hrns-deploy   # 🚀
+complete -F _hrns_pipes_complete  hrns-status   # 📊
+complete -F _hrns_envs_complete   hrns-envs     # 🌱
 
-# Zsh compatibility
+# -------------------------------------
+# 🐚🔁 Zsh Compatibility
+# -------------------------------------
+
 if [[ -n "$ZSH_VERSION" ]]; then
+  echo "🐚✨ Enabling bash-style completion in zsh..."
   autoload -Uz bashcompinit && bashcompinit
 fi
 
-# --- Heroku Helpers ---
+# -------------------------------------
+# 🚀📡 Heroku Helpers (with logs)
+# -------------------------------------
 
-# Tail logs
+# 🧾 Tail logs
 heroku-logs() {
   if [ -z "$1" ]; then
-    echo "Usage: heroku-logs <app-name>"
+    echo "❌ Usage: heroku-logs <app-name>"
     return 1
   fi
+
+  echo "📡🧾 [$(date '+%Y-%m-%d %H:%M:%S')] Tailing logs"
+  echo "🏷️  App: $1"
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
   heroku logs --tail --app "$1"
 }
 
-# Open app in browser
+# 🌍 Open app in browser
 heroku-open() {
   if [ -z "$1" ]; then
-    echo "Usage: heroku-open <app-name>"
+    echo "❌ Usage: heroku-open <app-name>"
     return 1
   fi
+
+  echo "🌍🚀 [$(date '+%Y-%m-%d %H:%M:%S')] Opening app in browser"
+  echo "🏷️  App: $1"
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
   heroku apps:open --app "$1"
 }
 
-# Restart dyno(s)
+# 🔁 Restart dyno(s)
 heroku-restart() {
   if [ -z "$1" ]; then
-    echo "Usage: heroku-restart <app-name>"
+    echo "❌ Usage: heroku-restart <app-name>"
     return 1
   fi
-  heroku ps:restart web.1 --app "$1"
+
+  echo "🔁⚙️  [$(date '+%Y-%m-%d %H:%M:%S')] Restarting dyno"
+  echo "🏷️  App: $1"
+  echo "🧠 Dyno: web.1"
+  echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+  heroku ps:restart web.1 --app "$1" && \
+    echo "✅🎉 Dyno restarted successfully"
 }
 
-# MacOS
+# 🍎💻 macOS Helpers
 
-# Brew
+# -------------------------------------
+# 🌱 Environment
+# -------------------------------------
 
 function print-env() {
-  lines=$(printenv);
-  IFS=$'\n' sorted=$(sort <<< "${lines[*]}");
-  unset IFS;
-  printf "%s" "${sorted[@]}";
+  echo "🌍📦 Printing environment variables (sorted)..."
+  lines=$(printenv)
+  IFS=$'\n' sorted=$(sort <<< "${lines[*]}")
+  unset IFS
+  printf "%s" "${sorted[@]}"
 }
 
-alias delete-ds-store="find . -name ".DS_Store" -delete"
-alias kill-port='sudo lsof -i tcp:'
-alias hex='openssl rand -hex 32'
+# -------------------------------------
+# 🧹 Utilities
+# -------------------------------------
+
+alias delete-ds-store='echo "🧹🗑️ Deleting .DS_Store files..." && find . -name ".DS_Store" -delete'
+alias kill-port='echo "💀🔌 Killing process on port:" && sudo lsof -i tcp:'
+alias hex='echo "🔐🎲 Generating random hex..." && openssl rand -hex 32'
+
+# -------------------------------------
+# 📦 Package / Workspace Helpers
+# -------------------------------------
 
 list_packages() {
+  echo "📦🗂️ Scanning for package folders..."
   for d in */; do
     if [[ -d "$d/packages" ]]; then
-      echo "[$d]"
+      echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      echo "📁 $d"
       find "$d/packages" -mindepth 1 -maxdepth 1 -type d | sort
       echo
     fi
   done
 }
 
+# -------------------------------------
+# 🔄🌍 Update All Repositories
+# -------------------------------------
+
 update_repos() {
-  echo "🔍 Scanning deeply for git repositories..."
+  echo "🔍🌍 Scanning deeply for git repositories..."
+  echo "📍 Root: $(pwd)"
+  echo
 
   local root
   root="$(pwd)"
@@ -492,169 +566,254 @@ update_repos() {
   while IFS= read -r -d '' gitdir; do
     dir="$(dirname "$gitdir")"
 
-    echo "-----------------------------------"
-    echo "🔄 Processing: $dir"
-    echo "-----------------------------------"
+    echo "══════════════════════════════════════"
+    echo "📂🔄 Processing repository:"
+    echo "➡️  $dir"
+    echo "══════════════════════════════════════"
 
     if [ ! -d "$dir" ]; then
-      echo "❌ Skipping (directory no longer exists)"
+      echo "❌🚫 Skipping (directory no longer exists)"
       continue
     fi
 
     (
       cd "$dir" || exit 0
 
-      # Ensure it's a real git repo
+      echo "🧠🔎 Validating git repository..."
       git rev-parse --is-inside-work-tree >/dev/null 2>&1 || {
-        echo "⚠️ Not a valid git repository"
+        echo "⚠️🧪 Not a valid git repository"
         exit 0
       }
 
+      echo "⬇️🔁 Pulling latest changes (rebase)..."
       git pull origin --rebase
 
       if [ -f "pnpm-workspace.yaml" ] || [ -d "node_modules" ]; then
+        echo "📦⬆️ Updating pnpm packages (recursive, latest)..."
         pnpm update --latest -r
+      else
+        echo "📦😴 No pnpm workspace detected"
       fi
 
+      echo "➕📂 Staging changes..."
       git add -A
-      git commit -m "update packages" 2>/dev/null \
-        || echo "⚠️ No changes to commit"
 
+      echo "✍️📝 Committing updates..."
+      git commit -m "update packages" 2>/dev/null \
+        || echo "⚠️😴 No changes to commit"
+
+      echo "📡⬆️ Pushing to remote..."
       git push
     )
 
+    echo "⬅️🚪 Done with repo"
     echo
   done
+
+  echo "🏁🎉 Repository update sweep completed"
 }
+
+# -------------------------------------
+# 📋📎 Clipboard Helper
+# -------------------------------------
 
 clipboard() {
   local content
 
+  echo "📋🔍 Reading clipboard..."
+
   if command -v pbpaste >/dev/null; then
+    echo "🍎 Using pbpaste"
     content="$(pbpaste)"
   elif command -v wl-paste >/dev/null; then
+    echo "🐧 Using wl-paste"
     content="$(wl-paste)"
   elif command -v xclip >/dev/null; then
+    echo "🧪 Using xclip"
     content="$(xclip -selection clipboard -o)"
   else
-    echo "❌ Clipboard tool not found" >&2
+    echo "❌🚫 Clipboard tool not found" >&2
     return 2
   fi
 
-  [[ -n "$content" ]] || return 1
+  [[ -n "$content" ]] || {
+    echo "⚠️📭 Clipboard is empty"
+    return 1
+  }
+
   printf "%s" "$content"
 }
 
-alias back="cd .."
-alias home="cd ~"
+# -------------------------------------
+# 🧭 Navigation
+# -------------------------------------
 
-# Terraform Shortcuts (Compact)
+alias back='echo "⬅️📁 Going back..." && cd ..'
+alias home='echo "🏠📁 Going home..." && cd ~'
 
-alias tf='terraform'
+# -------------------------------------
+# 🌍🧱 Terraform Shortcuts (Compact)
+# -------------------------------------
 
-tf-init()      { terraform init "$@"; }
-tf-plan()      { terraform plan "$@"; }
-tf-apply()     { terraform apply "$@"; }
-tf-apply-auto(){ terraform apply -auto-approve "$@"; }
-tf-destroy()   { terraform destroy "$@"; }
-tf-destroy-auto(){ terraform destroy -auto-approve "$@"; }
-tf-fmt()       { terraform fmt "$@"; }
-tf-validate()  { terraform validate "$@"; }
-tf-show()      { terraform show "$@"; }
-tf-state()     { terraform state "$@"; }
-tf-output()    { terraform output "$@"; }
+alias tf='terraform'   # 🧱 Core Terraform CLI
+
+# 🚀 Initialization
+tf-init() {
+  echo "🚀📦 Initializing Terraform..."
+  terraform init "$@"
+}
+
+# 🧠 Planning
+tf-plan() {
+  echo "🧠📐 Generating execution plan..."
+  terraform plan "$@"
+}
+
+# 🛠️ Apply (manual approve)
+tf-apply() {
+  echo "🛠️🚦 Applying Terraform changes (manual approval)..."
+  terraform apply "$@"
+}
+
+# ⚡ Apply (auto approve)
+tf-apply-auto() {
+  echo "⚡🚀 Applying Terraform changes (auto-approve)..."
+  terraform apply -auto-approve "$@"
+}
+
+# 💣 Destroy (manual approve)
+tf-destroy() {
+  echo "💣⚠️ Destroying infrastructure (manual approval)..."
+  terraform destroy "$@"
+}
+
+# ☢️ Destroy (auto approve)
+tf-destroy-auto() {
+  echo "☢️🔥 Destroying infrastructure (auto-approve)..."
+  terraform destroy -auto-approve "$@"
+}
+
+# 🧹 Format
+tf-fmt() {
+  echo "🧹✨ Formatting Terraform files..."
+  terraform fmt "$@"
+}
+
+# ✅ Validate
+tf-validate() {
+  echo "✅🔍 Validating Terraform configuration..."
+  terraform validate "$@"
+}
+
+# 👀 Show
+tf-show() {
+  echo "👀📄 Showing Terraform state / plan..."
+  terraform show "$@"
+}
+
+# 🗺️ State
+tf-state() {
+  echo "🗺️📦 Managing Terraform state..."
+  terraform state "$@"
+}
+
+# 📤 Outputs
+tf-output() {
+  echo "📤🔑 Fetching Terraform outputs..."
+  terraform output "$@"
+}
 
 #
-# Windows → macOS Command Compatibility Layer
+# 🪟➡️🍎 Windows → macOS Command Compatibility Layer
 #
 # Drop this file into your shell config:
 #   source ~/windows-aliases.sh
 #
-# Provides familiar Windows CLI commands on macOS.
+# Provides familiar Windows CLI commands on macOS 💻
 
 
 ### -----------------------------
-###  Basic Terminal Commands
+### 🧹 Basic Terminal Commands
 ### -----------------------------
 
-# Windows: cls → Clear screen
+# Windows: cls → Clear screen 🧼
 alias cls='clear'
 
-# Windows: rst / reset → Reset terminal
+# Windows: rst / reset → Reset terminal 🔄
 alias rst='reset'
 
 
 ### -----------------------------
-###  Files & Directories
+### 📁 Files & Directories
 ### -----------------------------
 
-# dir → ls -al (detailed directory listing)
+# dir → ls -al (detailed directory listing 📜)
 alias dir='ls -al'
 
-# copy → cp
+# copy → cp 📄➡️📄
 alias copy='cp'
 
-# move → mv
+# move → mv 🚚
 alias move='mv'
 
-# del / erase → rm
+# del / erase → rm ❌
 alias del='rm'
 alias erase='rm'
 
-# md / mk → mkdir
+# md / mk → mkdir 🏗️
 alias md='mkdir'
 alias mk='mkdir'
 
-# ren → mv (rename file)
+# ren → mv (rename file ✏️)
 alias ren='mv'
 
-# type → cat (print file contents)
+# type → cat (print file contents 🐱)
 alias type='cat'
 
 
 ### -----------------------------
-###  Processes & System Info
+### ⚙️ Processes & System Info
 ### -----------------------------
 
-# tasklist → ps aux
+# tasklist → ps aux 📊
 alias tasklist='ps aux'
 
-# taskkill → kill
+# taskkill → kill ☠️
 alias taskkill='kill'
 
-# ipconfig → ifconfig (network info)
+# ipconfig → ifconfig 🌐
 alias ipconfig='ifconfig'
 
-# hostname → hostname (same command exists but included for completeness)
+# hostname → hostname 🏷️
 alias hostname='hostname'
 
 
 ### -----------------------------
-###  Network Utilities
+### 🌍 Network Utilities
 ### -----------------------------
 
-# ping (same command exists)
+# ping (same command exists 🏓)
 alias ping='ping'
 
-# tracert → traceroute
+# tracert → traceroute 🧭
 alias tracert='traceroute'
 
 
 ### -----------------------------
-###  Extra Quality-of-Life Aliases
+### ✨ Extra Quality-of-Life Aliases
 ### -----------------------------
 
-# cls with scrollback reset (optional)
+# cls with scrollback reset (optional 🧨)
 # alias cls='printf "\033c"'
 
 
 ### -----------------------------
-###  Safety Notes
+### ⚠️ Safety Notes
 ### -----------------------------
-# These aliases intentionally keep behavior simple.
+# These aliases intentionally keep behavior simple 🧠
 # If you need more advanced Windows emulation, consider:
-#   - Homebrew packages (e.g., cowsay, coreutils)
-#   - Installing PowerShell (brew install --cask powershell)
+#   🍺 Homebrew packages (e.g., cowsay, coreutils)
+#   🧩 Installing PowerShell (brew install --cask powershell)
 
 
-### END
+### 🚀 END

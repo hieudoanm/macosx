@@ -1,45 +1,57 @@
 #!/bin/bash
 
 # -------------------------------------
-# Compact Harness CLI Shortcuts
+# 🚀🧩 Compact Harness CLI Shortcuts 🧩🚀
 # -------------------------------------
 
-alias hrns='harness'
+alias hrns='harness'   # 🐎 Core Harness CLI
 
-hrns-login()     { harness login "$@"; }
-hrns-orgs()      { harness org list "$@"; }
-hrns-projs()     { harness project list "$@"; }
-hrns-pipes()     { harness pipeline list "$@"; }
-hrns-deploy()    { harness pipeline execute "$@"; }
-hrns-status()    { harness pipeline execution get "$@"; }
-hrns-envs()      { harness environment list "$@"; }
-hrns-secrets()   { harness secret list "$@"; }
-hrns-connect()   { harness connector list "$@"; }
+# 🔐 Authentication
+hrns-login()     { echo "🔐🚪 Logging into Harness..."; harness login "$@"; }
+
+# 🏢 Organization & Project
+hrns-orgs()      { echo "🏢📋 Listing organizations..."; harness org list "$@"; }
+hrns-projs()     { echo "📁📋 Listing projects..."; harness project list "$@"; }
+
+# 🚀 Pipelines
+hrns-pipes()     { echo "🧪📜 Listing pipelines..."; harness pipeline list "$@"; }
+hrns-deploy()    { echo "🚀🔥 Executing pipeline..."; harness pipeline execute "$@"; }
+hrns-status()    { echo "📊🔍 Fetching pipeline execution status..."; harness pipeline execution get "$@"; }
+
+# 🌱 Environments
+hrns-envs()      { echo "🌱📋 Listing environments..."; harness environment list "$@"; }
+
+# 🔐 Secrets & Connectors
+hrns-secrets()   { echo "🔑📜 Listing secrets..."; harness secret list "$@"; }
+hrns-connect()   { echo "🔌🌍 Listing connectors..."; harness connector list "$@"; }
 
 
 # -------------------------------------
-# Auto-Completion Helpers
+# 🧠⚙️ Auto-Completion Helpers
 # -------------------------------------
 
-# Pull a list of values using Harness CLI, output only the names
+# 🏢 Fetch org identifiers
 _hrns_list_orgs() {
   harness org list 2>/dev/null | awk '{print $1}' | tail -n +2
 }
 
+# 📁 Fetch project identifiers
 _hrns_list_projects() {
   harness project list 2>/dev/null | awk '{print $1}' | tail -n +2
 }
 
+# 🧪 Fetch pipeline identifiers
 _hrns_list_pipelines() {
   harness pipeline list 2>/dev/null | awk '{print $1}' | tail -n +2
 }
 
+# 🌱 Fetch environment identifiers
 _hrns_list_envs() {
   harness environment list 2>/dev/null | awk '{print $1}' | tail -n +2
 }
 
 # -------------------------------------
-# Auto-Completion Definitions
+# 🧩✨ Auto-Completion Definitions
 # -------------------------------------
 
 _hrns_orgs_complete() {
@@ -59,17 +71,21 @@ _hrns_envs_complete() {
 }
 
 # -------------------------------------
-# Bind completion to functions
+# 🔗🧠 Bind completion to commands
 # -------------------------------------
 
-complete -F _hrns_orgs_complete   hrns-orgs
-complete -F _hrns_projs_complete  hrns-projs
-complete -F _hrns_pipes_complete  hrns-pipes
-complete -F _hrns_pipes_complete  hrns-deploy
-complete -F _hrns_pipes_complete  hrns-status
-complete -F _hrns_envs_complete   hrns-envs
+complete -F _hrns_orgs_complete   hrns-orgs     # 🏢
+complete -F _hrns_projs_complete  hrns-projs    # 📁
+complete -F _hrns_pipes_complete  hrns-pipes    # 🧪
+complete -F _hrns_pipes_complete  hrns-deploy   # 🚀
+complete -F _hrns_pipes_complete  hrns-status   # 📊
+complete -F _hrns_envs_complete   hrns-envs     # 🌱
 
-# Zsh compatibility
+# -------------------------------------
+# 🐚🔁 Zsh Compatibility
+# -------------------------------------
+
 if [[ -n "$ZSH_VERSION" ]]; then
+  echo "🐚✨ Enabling bash-style completion in zsh..."
   autoload -Uz bashcompinit && bashcompinit
 fi
