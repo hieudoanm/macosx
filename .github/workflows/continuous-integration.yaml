@@ -14,7 +14,7 @@ on:
 jobs:
   ci:
     name: Continuous Integration
-    runs-on: macos-latest # Use latest macOS runner
+    runs-on: ubuntu-latest # Use latest macOS runner
 
     steps:
       # Step 1: Checkout the repository code
