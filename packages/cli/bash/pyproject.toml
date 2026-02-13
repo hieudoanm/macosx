@@ -5,5 +5,5 @@ description = "bash shortcuts"
 readme = "README.md"
 requires-python = "==3.14.3"
 dependencies = [
-    "ruff==0.15.0",
+    "ruff==0.15.1",
 ]
