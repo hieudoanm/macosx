@@ -29,7 +29,7 @@
     "prestart": "kill-port 3000 || true",
     "start": "next start",
     "format": "prettier --cache --write .",
-    "lint": "eslint"
+    "lint": "eslint . --fix"
   },
   "dependencies": {
     "@tauri-apps/api": "2.10.1",
