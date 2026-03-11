@@ -4,7 +4,7 @@ set -e
 # --------------------------------------
 # Configuration
 # --------------------------------------
-REPO_RAW_URL="https://raw.githubusercontent.com/hieudoanm/bash/master/dist/full.bash"
+REPO_RAW_URL="https://raw.githubusercontent.com/hieudoanm/macosx/master/packages/cli/bash/dist/full.bash"
 INSTALL_DIR="/usr/local/bin"
 INSTALL_NAME="full-bash"  # optional global name
 
