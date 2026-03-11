@@ -218,7 +218,7 @@ function gpullall() {
       echo "✅ Repo up-to-date: $repo"
 
     ) || echo "⚠️ Repository failed: $repo"
-  ' _ {} "$branch"
+  ' _ "$branch"
 
   echo
   echo "========================================"
