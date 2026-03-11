@@ -185,46 +185,44 @@ function gcommitall() {
 # ⬇️🌿 Pull all repos
 function gpullall() {
   local branch="${1:-master}"
+  local jobs="${JOBS:-8}"
 
   echo "========================================"
   echo "🚀⬇️ gpullall started"
   echo "🌿 Target branch: $branch"
   echo "📁 Root directory: $(pwd)"
+  echo "⚡ Parallel jobs: $jobs"
   echo "========================================"
 
   find . -type d -name .git -prune -print |
-  while read -r gitdir; do
-    repo="$(dirname "$gitdir")"
+  sed 's|/\.git$||' |
+  xargs -n 1 -P "$jobs" bash -c '
+    repo="$1"
+    branch="$2"
 
     echo
     echo "----------------------------------------"
-    echo "📦📍 Repository: $repo"
-    echo "🔀🌿 Branch: $branch"
+    echo "📦 Repository: $repo"
+    echo "🌿 Branch: $branch"
     echo "----------------------------------------"
 
     (
-      echo "➡️🚪 Entering repository"
       cd "$repo" || {
-        echo "❌🚫 cd failed"
+        echo "❌ cd failed: $repo"
         exit 1
       }
 
-      echo "✔️🔁 Checkout branch"
-      git checkout "$branch" || exit 1
+      git checkout "$branch" &&
+      git fetch origin "$branch" &&
+      git pull origin "$branch" &&
+      echo "✅ Repo up-to-date: $repo"
 
-      echo "⬇️📡 Fetching updates"
-      git fetch origin "$branch" || exit 1
-
-      echo "🔄📥 Pulling latest changes"
-      git pull origin "$branch" || exit 1
-
-      echo "✅🎉 Repo up-to-date"
-    ) || echo "⚠️🔥 Repository failed: $repo"
-  done
+    ) || echo "⚠️ Repository failed: $repo"
+  ' _ {} "$branch"
 
   echo
   echo "========================================"
-  echo "🏁🎯 gpullall finished"
+  echo "🏁 gpullall finished"
   echo "========================================"
 }
 
@@ -370,6 +368,39 @@ alias gsetemaillocal='git config --local user.email '
 alias gsetnamelocal='git config --local user.name '
 alias gsetemailglobal='git config --global user.email '
 alias gsetnameglobal='git config --global user.name '
+
+### GitHub ###
+
+function ghprall() {
+  gh repo list --limit 1000 --json nameWithOwner --jq '.[].nameWithOwner' | \
+xargs -n 1 -P 8 bash -c '
+repo="$1"
+
+echo "=== Processing repo: $repo ==="
+
+gh pr list \
+  --repo "$repo" \
+  --state open \
+  --limit 1000 \
+  --json number \
+  --jq ".[].number" | \
+while read pr; do
+  echo "[$repo] Merging PR #$pr"
+
+  if gh pr merge "$pr" --repo "$repo" --squash; then
+    echo "[$repo] ✅ Squash merged PR #$pr"
+  else
+    echo "[$repo] ⚠️ Direct merge failed, trying auto-merge..."
+
+    if gh pr merge "$pr" --repo "$repo" --squash --auto; then
+      echo "[$repo] ✅ Auto-merge enabled PR #$pr"
+    else
+      echo "[$repo] ❌ Failed PR #$pr — skipping"
+    fi
+  fi
+done
+' _
+}
 
 # -------------------------------------
 # 🚀🧩 Compact Harness CLI Shortcuts 🧩🚀
