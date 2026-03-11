@@ -231,13 +231,18 @@ function gpullall() {
         exit 1
       }
 
-      git checkout "$branch" &&
-      git fetch origin "$branch" &&
-      git pull origin "$branch" &&
+      current=$(git branch --show-current)
+
+      if [ "$current" != "$branch" ]; then
+        git checkout "$branch" || exit 1
+      fi
+
+      git pull --ff-only origin "$branch" &&
       echo "✅ Repo up-to-date: $repo"
 
     ) || echo "⚠️ Repository failed: $repo"
-  ' _ "$branch"
+
+  ' _ {} "$branch"
 
   echo
   echo "========================================"
