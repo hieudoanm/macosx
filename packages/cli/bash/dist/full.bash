@@ -196,7 +196,7 @@ function gpullall() {
 
   find . -type d -name .git -prune -print |
   sed 's|/\.git$||' |
-  xargs -n 1 -P "$jobs" bash -c '
+  xargs -I {} -P "$jobs" bash -c '
     repo="$1"
     branch="$2"
 
@@ -222,7 +222,6 @@ function gpullall() {
       echo "✅ Repo up-to-date: $repo"
 
     ) || echo "⚠️ Repository failed: $repo"
-
   ' _ {} "$branch"
 
   echo
