@@ -1,8 +1,8 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "macosx",
+  "productName": "MacOSX",
   "version": "0.0.1",
-  "identifier": "io.hieudoanm.macosx",
+  "identifier": "io.github.hieudoanm.macosx",
 
   "build": {
     "frontendDist": "../out",
@@ -15,7 +15,7 @@
     "macOSPrivateApi": true,
     "windows": [
       {
-        "title": "macOSX",
+        "title": "MacOSX",
         "width": 800,
         "height": 600,
         "resizable": true,
