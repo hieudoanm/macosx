@@ -29,7 +29,6 @@
     "test": "jest",
     "prebuild": "rimraf ./src-tauri/bin/wifi ./src-tauri/target .next out && make build",
     "build": "next build --turbopack",
-    "build:tauri": "tauri build",
     "prestart": "kill-port 3000 || true",
     "start": "next start",
     "tauri": "tauri",
