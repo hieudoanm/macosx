@@ -5,7 +5,7 @@
   "identifier": "io.github.hieudoanm.macosx",
 
   "build": {
-    "frontendDist": "../out",
+    "frontendDist": "../../../docs",
     "devUrl": "http://localhost:3000",
     "beforeDevCommand": "pnpm dev",
     "beforeBuildCommand": "pnpm build"
