@@ -1,4 +1,4 @@
-import { LandingTemplate } from '@macosx/templates/LandingTemplate';
+import { LandingTemplate } from '@wifi/templates/LandingTemplate';
 import { NextPage } from 'next';
 
 const HomePage: NextPage = () => {

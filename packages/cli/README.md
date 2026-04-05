@@ -1,8 +1,8 @@
-# 🚀 MacOSX CLI
+# 🚀 Wifi CLI
 
 ## 📚 Table of Contents
 
-- [🚀 MacOSX CLI](#-macosx-cli)
+- [🚀 Wifi CLI](#-wifi-cli)
   - [📚 Table of Contents](#-table-of-contents)
   - [📦 Installation](#-installation)
   - [🚀 Usage](#-usage)
@@ -11,13 +11,13 @@
 ## 📦 Installation
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/hieudoanm/macosx/master/packages/cli/scripts/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/hieudoanm/wifi/master/packages/cli/scripts/install.sh | bash
 ```
 
 ## 🚀 Usage
 
 ```bash
-macosx
+wifi
 ```
 
 ## 📄 License

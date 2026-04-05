@@ -3,8 +3,8 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-BIN_NAME="macosx"
-REPO_URL="https://github.com/hieudoanm/macosx/raw/refs/heads/master/packages/cli/bin/macosx"
+BIN_NAME="wifi"
+REPO_URL="https://github.com/hieudoanm/wifi/raw/refs/heads/master/packages/cli/bin/wifi"
 INSTALL_DIR="/usr/local/bin"
 
 echo "Downloading $BIN_NAME..."

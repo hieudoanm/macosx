@@ -1,5 +1,5 @@
+import { VersionTemplate } from '@wifi/templates/VersionTemplate';
 import { GetStaticProps, NextPage } from 'next';
-import { VersionTemplate } from '@macosx/templates/VersionTemplate';
 
 type Props = {
   version: string;

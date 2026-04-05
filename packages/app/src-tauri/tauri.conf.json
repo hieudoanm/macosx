@@ -1,8 +1,8 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "macosx",
+  "productName": "wifi",
   "version": "0.0.1",
-  "identifier": "io.github.hieudoanm.macosx",
+  "identifier": "io.github.hieudoanm.wifi",
 
   "build": {
     "frontendDist": "../../../docs",
@@ -15,7 +15,7 @@
     "macOSPrivateApi": true,
     "windows": [
       {
-        "title": "MacOSX",
+        "title": "Wifi",
         "width": 800,
         "height": 600,
         "resizable": true,

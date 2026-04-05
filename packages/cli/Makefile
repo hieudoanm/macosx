@@ -1,11 +1,11 @@
 .PHONY: lint format build install all
 
 BIN_DIR := bin
-BIN_NAME := macosx
+BIN_NAME := wifi
 SRC := ./main.go
 
 VERSION := $(shell date +%Y.%m.%d.%H.%M.%S)
-LDFLAGS := -ldflags="-X 'github.com/hieudoanm/macosx/src/cmd.Version=$(VERSION)'"
+LDFLAGS := -ldflags="-X 'github.com/hieudoanm/wifi/src/cmd.Version=$(VERSION)'"
 
 
 ## Commands

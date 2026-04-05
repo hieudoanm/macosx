@@ -1,4 +1,4 @@
-import { ErrorTemplate } from '@macosx/templates/ErrorTemplate';
+import { ErrorTemplate } from '@wifi/templates/ErrorTemplate';
 import { NextPage } from 'next';
 
 const messages = [

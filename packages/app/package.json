@@ -1,20 +1,17 @@
 {
-  "name": "@macosx/app",
+  "name": "@wifi/app",
   "version": "0.0.1",
-  "description": "macosx",
+  "description": "wifi",
   "keywords": [
-    "clipboard",
-    "wifi",
-    "macosx",
-    "strength"
+    "wifi"
   ],
-  "homepage": "https://hieudoanm.github.io/macosx",
+  "homepage": "https://hieudoanm.github.io/wifi",
   "bugs": {
-    "url": "https://github.com/hieudoanm/macosx/issues"
+    "url": "https://github.com/hieudoanm/wifi/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@github.com/hieudoanm/macosx.git"
+    "url": "git+ssh://git@github.com/hieudoanm/wifi.git"
   },
   "license": "GPL-3.0",
   "author": "hieudoanm <hieumdoan@gmail.com> (https://hieudoanm.github.io)",
