@@ -9,8 +9,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/charmbracelet/bubbles/list"
-	tea "github.com/charmbracelet/bubbletea"
+	"charm.land/bubbles/v2/list"
+	tea "charm.land/bubbletea/v2"
+
 	"github.com/spf13/cobra"
 )
 
@@ -25,12 +26,10 @@ type Network struct {
 }
 
 func findAirportPath() (string, error) {
-	// 1️⃣ Try PATH lookup first
 	if p, err := exec.LookPath("airport"); err == nil {
 		return p, nil
 	}
 
-	// 2️⃣ Known default locations
 	candidates := []string{
 		"/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport",
 		"/System/Library/PrivateFrameworks/Apple80211.framework/Resources/airport",
@@ -42,7 +41,6 @@ func findAirportPath() (string, error) {
 		}
 	}
 
-	// 3️⃣ Spotlight search fallback
 	cmd := exec.Command(
 		"mdfind",
 		"kMDItemFSName == 'airport' && kMDItemKind == 'Unix Executable'",
@@ -66,7 +64,6 @@ func scanWifi() ([]Network, error) {
 	}
 
 	cmd := exec.Command(airportPath, "-s")
-
 	out, err := cmd.Output()
 	if err != nil {
 		return nil, err
@@ -125,27 +122,22 @@ func connectWifi(ssid, password string) error {
 }
 
 ////////////////////////////////////////////////////////////
-// Bubble Tea List
+// Bubble Tea List (v2)
 ////////////////////////////////////////////////////////////
 
 type item Network
 
-func (i item) Title() string {
-	return i.SSID
-}
+func (i item) Title() string { return i.SSID }
 
 func (i item) Description() string {
 	lock := "🔓"
 	if i.Security != "NONE" {
 		lock = "🔒"
 	}
-
-	return fmt.Sprintf("%s  RSSI: %d  Security: %s", lock, i.RSSI, i.Security)
+	return fmt.Sprintf("%s RSSI: %d Security: %s", lock, i.RSSI, i.Security)
 }
 
-func (i item) FilterValue() string {
-	return i.SSID
-}
+func (i item) FilterValue() string { return i.SSID }
 
 type model struct {
 	list   list.Model
@@ -154,7 +146,6 @@ type model struct {
 
 func newModel(networks []Network) model {
 	var items []list.Item
-
 	for _, n := range networks {
 		items = append(items, item(n))
 	}
@@ -190,16 +181,19 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, cmd
 }
 
-func (m model) View() string {
+/* ---------------- View (v2 FIX) ---------------- */
+
+func (m model) View() tea.View {
 	if m.choice != nil {
-		return fmt.Sprintf("Selected: %s\n", m.choice.SSID)
+		return tea.NewView(fmt.Sprintf("Selected: %s\n", m.choice.SSID))
 	}
 
-	return "\n" + m.list.View()
+	return tea.NewView("\n" + m.list.View())
 }
 
 func selectNetwork(networks []Network) (*Network, error) {
 	p := tea.NewProgram(newModel(networks))
+
 	m, err := p.Run()
 	if err != nil {
 		return nil, err
@@ -210,7 +204,7 @@ func selectNetwork(networks []Network) (*Network, error) {
 }
 
 ////////////////////////////////////////////////////////////
-// Cobra Root (single command)
+// Cobra Command
 ////////////////////////////////////////////////////////////
 
 var wifiCmd = &cobra.Command{
@@ -240,7 +234,6 @@ var wifiCmd = &cobra.Command{
 			return nil
 		}
 
-		// Password prompt
 		var password string
 		if choice.Security != "NONE" {
 			fmt.Print("Password: ")
@@ -251,8 +244,7 @@ var wifiCmd = &cobra.Command{
 
 		fmt.Printf("Connecting to %s...\n", choice.SSID)
 
-		err = connectWifi(choice.SSID, password)
-		if err != nil {
+		if err := connectWifi(choice.SSID, password); err != nil {
 			return err
 		}
 
